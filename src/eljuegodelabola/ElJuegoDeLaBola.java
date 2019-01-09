@@ -35,7 +35,7 @@ public class ElJuegoDeLaBola extends Application {
         root.getChildren().add(btn);
         
         Scene scene = new Scene(root, 512, 512);
-        
+        scene.setFill(Color.BLACK);
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(scene);
         primaryStage.show();

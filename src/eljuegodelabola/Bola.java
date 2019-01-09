@@ -13,4 +13,8 @@ import javafx.scene.shape.Circle;
  */
 public class Bola {
     Circle bola = new Circle();
+    bola.setCenterX(10);
+    bola.setCenterY(30);
+    bola.setRadius(7);
+    root.getChildren().add(circleBall);
 }
