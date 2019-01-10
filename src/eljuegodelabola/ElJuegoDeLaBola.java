@@ -27,8 +27,8 @@ public class ElJuegoDeLaBola extends Application {
     
     double dimensionX = 512;
     double dimensionY = 512;
-    double BolaX = dimensionX/2;
-    double BolaY = dimensionY/2;
+    double bolaX = dimensionX/2;
+    double bolaY = dimensionY/2;
     
     @Override
     public void start(Stage primaryStage) {       
@@ -40,22 +40,22 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.show();
         
         Circle bola = new Circle();
-        bola.setCenterX(BolaX);
-        bola.setCenterY(BolaY);
+        bola.setCenterX(bolaX);
+        bola.setCenterY(bolaY);
         bola.setRadius(20);
         bola.setFill(Color.DARKGREEN);
         root.getChildren().add(bola);
         
         Circle bolaclaro = new Circle();
-        bolaclaro.setCenterX(BolaX+4);
-        bolaclaro.setCenterY(BolaY-8);
-        bolaclaro.setRadius(10);
+        bolaclaro.setCenterX(bolaX+4);
+        bolaclaro.setCenterY(bolaY-3);
+        bolaclaro.setRadius(15);
         bolaclaro.setFill(Color.GREEN);
         root.getChildren().add(bolaclaro);
         
         Circle bolablanca = new Circle();
-        bolablanca.setCenterX(BolaX+4);
-        bolablanca.setCenterY(BolaY-8);
+        bolablanca.setCenterX(bolaX+6);
+        bolablanca.setCenterY(bolaY-8);
         bolablanca.setRadius(5);
         bolablanca.setFill(Color.LAWNGREEN);
         root.getChildren().add(bolablanca);
@@ -63,8 +63,8 @@ public class ElJuegoDeLaBola extends Application {
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
-                BolaY++;
-                System.out.println(BolaY);
+                bolaY++;
+                System.out.println(bolaY);
             };
         };
           animationBall.start();      
