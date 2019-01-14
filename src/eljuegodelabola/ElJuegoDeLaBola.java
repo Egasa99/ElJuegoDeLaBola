@@ -8,16 +8,15 @@ package eljuegodelabola;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -29,7 +28,6 @@ public class ElJuegoDeLaBola extends Application {
     double dimensionY = 512;
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
-    
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -38,36 +36,64 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
+        // Bola principal
         Circle bola = new Circle();
-        bola.setCenterX(bolaX);
-        bola.setCenterY(bolaY);
+        bola.setCenterX(0);
+        bola.setCenterY(0);
         bola.setRadius(20);
         bola.setFill(Color.DARKGREEN);
-        root.getChildren().add(bola);
         
+        // Primer claro
         Circle bolaclaro = new Circle();
-        bolaclaro.setCenterX(bolaX+4);
-        bolaclaro.setCenterY(bolaY-3);
+        bolaclaro.setCenterX(4);
+        bolaclaro.setCenterY(-3);
         bolaclaro.setRadius(15);
         bolaclaro.setFill(Color.GREEN);
-        root.getChildren().add(bolaclaro);
         
+        // Segundo claro
         Circle bolablanca = new Circle();
-        bolablanca.setCenterX(bolaX+6);
-        bolablanca.setCenterY(bolaY-8);
+        bolablanca.setCenterX(6);
+        bolablanca.setCenterY(-8);
         bolablanca.setRadius(5);
         bolablanca.setFill(Color.LAWNGREEN);
-        root.getChildren().add(bolablanca);
+        
+        // bola completa
+        Group bolaCompleta = new Group();
+        bolaCompleta.getChildren().add(bola);
+        bolaCompleta.getChildren().add(bolaclaro);
+        bolaCompleta.getChildren().add(bolablanca);
+        root.getChildren().add(bolaCompleta);
         
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
-                bolaY++;
-                System.out.println(bolaY);
+                bolaCompleta.setLayoutX(bolaX);
+                bolaCompleta.setLayoutY(bolaY);
+                
+                bolaX++;
+                bolaY=(Math.pow(-bolaX,2)+bolaX*2);
+                
+                System.out.println("bola X: "+bolaX);
+                System.out.println("bola Y: "+bolaY);
             };
         };
+                 // Detectar clic en ratón (pulsado y soltado)
+        bolaCompleta.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
+                System.out.println("Mouse clicked X : Y - " + 
+                        mouseEvent.getX() + " : " + mouseEvent.getY());
+                // También se puede comprobar sobre qué botón se ha actuado,
+                //  válido para cualquier acción (pressed, released, clicked, etc) 
+                if(mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    System.out.println("Botón principal");
+                    
+                }
+            }
+        });
           animationBall.start();      
     }
 
 }
+
