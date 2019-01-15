@@ -28,6 +28,13 @@ public class ElJuegoDeLaBola extends Application {
     double dimensionY = 512;
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
+    double anguloinicial = 45;
+    boolean golpe = false;
+    double gravedad = -9.807;
+    double velocidad = 7;
+    double radianes = 0;
+    double bolaInicioX = bolaX;
+    double bolaInicioY = bolaY;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -69,10 +76,28 @@ public class ElJuegoDeLaBola extends Application {
             public void handle(long now){
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
+
+                if (golpe == true){
+                    radianes = anguloinicial*Math.PI/180;
+                    bolaX++;
+                    bolaY =-(bolaX * Math.tan(radianes)-(gravedad*Math.pow(bolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
+                    bolaY = bolaY/10;
+                }
+                if (bolaX > dimensionX){
+                    bolaX = 0;
+                }
                 
-                bolaX++;
-                bolaY=(Math.pow(-bolaX,2)+bolaX*2);
+                if (bolaX < 0){
+                    bolaX = dimensionX;
+                }
                 
+//                if (bolaY > dimensionY){
+//                    bolaY = 0;
+//                }
+//                
+//                if (bolaY < 0){
+//                    bolaY = dimensionY;
+//                }
                 System.out.println("bola X: "+bolaX);
                 System.out.println("bola Y: "+bolaY);
             };
@@ -82,13 +107,14 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
+                
                 System.out.println("Mouse clicked X : Y - " + 
                         mouseEvent.getX() + " : " + mouseEvent.getY());
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
                     System.out.println("Botón principal");
-                    
+                    golpe = true;
                 }
             }
         });
