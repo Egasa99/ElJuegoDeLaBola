@@ -28,13 +28,15 @@ public class ElJuegoDeLaBola extends Application {
     double dimensionY = 512;
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
+    double incBolaY = dimensionY/2;
+    double incBolaX = 0;
     double anguloinicial = 45;
     boolean golpe = false;
-    double gravedad = -9.807;
+    double gravedad = 9.807;
     double velocidad = 7;
     double radianes = 0;
-    double bolaInicioX = bolaX;
-    double bolaInicioY = bolaY;
+    double bolaInicioX = dimensionX/2;
+    double bolaInicioY = dimensionY/2;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -79,17 +81,20 @@ public class ElJuegoDeLaBola extends Application {
 
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
-                    bolaX++;
-                    bolaY =-(bolaX * Math.tan(radianes)-(gravedad*Math.pow(bolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
-                    bolaY = bolaY/10;
+                    incBolaX++;
+                    incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
+                    incBolaY = (incBolaY/10);
+                    
+                    bolaY = bolaInicioY + incBolaY;
+                    bolaX = bolaInicioX + incBolaX;
                 }
-                if (bolaX > dimensionX){
-                    bolaX = 0;
-                }
-                
-                if (bolaX < 0){
-                    bolaX = dimensionX;
-                }
+//                if (bolaX > dimensionX){
+//                    bolaX = 0;
+//                }
+//                
+//                if (bolaX < 0){
+//                    bolaX = dimensionX;
+//                }
                 
 //                if (bolaY > dimensionY){
 //                    bolaY = 0;
@@ -99,11 +104,11 @@ public class ElJuegoDeLaBola extends Application {
 //                    bolaY = dimensionY;
 //                }
                 System.out.println("bola X: "+bolaX);
-                System.out.println("bola Y: "+bolaY);
+                System.out.println("bola Y: "+incBolaY);
             };
         };
                  // Detectar clic en ratón (pulsado y soltado)
-        bolaCompleta.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
