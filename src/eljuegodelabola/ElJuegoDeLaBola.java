@@ -30,13 +30,15 @@ public class ElJuegoDeLaBola extends Application {
     double bolaY = dimensionY/2;
     double incBolaY = dimensionY/2;
     double incBolaX = 0;
-    double anguloinicial = 45;
+    double anguloinicial = 79.64;
     boolean golpe = false;
     double gravedad = 9.807;
-    double velocidad = 7;
+    double velocidad = 20;
     double radianes = 0;
     double bolaInicioX = dimensionX/2;
     double bolaInicioY = dimensionY/2;
+    double clickX = 0;
+    double clickY = 0;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -103,23 +105,31 @@ public class ElJuegoDeLaBola extends Application {
 //                if (bolaY < 0){
 //                    bolaY = dimensionY;
 //                }
-                System.out.println("bola X: "+bolaX);
-                System.out.println("bola Y: "+incBolaY);
+//                System.out.println("bola X: "+bolaX);
+//                System.out.println("bola Y: "+incBolaY);
             };
         };
-                 // Detectar clic en ratón (pulsado y soltado)
+                 
         bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
                 
-                System.out.println("Mouse clicked X : Y - " + 
-                        mouseEvent.getX() + " : " + mouseEvent.getY());
+//                System.out.println("Raton pulsado en: " + 
+//                        "X " +mouseEvent.getX() + " Y " + mouseEvent.getY());
+                clickX = mouseEvent.getX();
+                System.out.println(clickX);
+                
+                clickY = mouseEvent.getY();
+                System.out.println(clickY);
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
                     System.out.println("Botón principal");
                     golpe = true;
+                    
+                    
+                    
                 }
             }
         });
