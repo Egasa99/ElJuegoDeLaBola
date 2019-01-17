@@ -22,23 +22,25 @@ import javafx.scene.input.MouseEvent;
  *
  * @author PC06
  */
+// BUG IMPORTANTE, GOLPE DERECHO+ GOLPE IZQUIERDO NO HACE ARCO ¿arreglado?
 public class ElJuegoDeLaBola extends Application {
     
-    double dimensionX = 512;
-    double dimensionY = 512;
+    final double dimensionX = 512;
+    final double dimensionY = 512;
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
     double incBolaY = dimensionY/2;
     double incBolaX = 0;
-    double anguloinicial = 79.64;
+    double anguloinicial = 88.80;
     boolean golpe = false;
     double gravedad = 9.807;
-    double velocidad = 20;
+    double velocidad = 100;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
     double radianes = 0;
     double bolaInicioX = dimensionX/2;
     double bolaInicioY = dimensionY/2;
     double clickX = 0;
     double clickY = 0;
+    boolean positivo = false;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -47,6 +49,7 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
         // Bola principal
         Circle bola = new Circle();
         bola.setCenterX(0);
@@ -83,24 +86,39 @@ public class ElJuegoDeLaBola extends Application {
 
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
-                    incBolaX++;
+                    
+                    
+                    if (positivo == true){
+                        incBolaX++;
+                        
+                    }
+                    
+                    else if (positivo == false){
+                        incBolaX--;
+                    }
                     incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
                     incBolaY = (incBolaY/10);
                     
                     bolaY = bolaInicioY + incBolaY;
                     bolaX = bolaInicioX + incBolaX;
+                    
                 }
-//                if (bolaX > dimensionX){
-//                    bolaX = 0;
-//                }
-//                
-//                if (bolaX < 0){
-//                    bolaX = dimensionX;
-//                }
                 
-//                if (bolaY > dimensionY){
-//                    bolaY = 0;
-//                }
+                //rebote
+                if (bolaX >= dimensionX){
+                    positivo = false;
+                    anguloinicial = -anguloinicial;
+                }
+                
+                if (bolaX <= 0){
+                    positivo = true;
+                }
+                
+                if (bolaY >= dimensionY){
+                    root.getChildren().remove(bolaCompleta);
+                    System.out.println("GAME OVER");
+                    primaryStage.close();
+                }
 //                
 //                if (bolaY < 0){
 //                    bolaY = dimensionY;
@@ -119,13 +137,29 @@ public class ElJuegoDeLaBola extends Application {
 //                        "X " +mouseEvent.getX() + " Y " + mouseEvent.getY());
                 clickX = mouseEvent.getX();
                 System.out.println(clickX);
-                
                 clickY = mouseEvent.getY();
                 System.out.println(clickY);
+                
+                if (clickX >0 && clickX >0){
+                    System.out.println("golpe-derecho");
+                    positivo = false;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial = -anguloinicial;
+                    incBolaX = 0;
+                }
+                
+                if (clickX <0 && clickX <0){
+                    System.out.println("golpe-izquierdo");
+                    positivo = true;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    incBolaX = 0;
+                }
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
-                    System.out.println("Botón principal");
                     golpe = true;
                     
                     
