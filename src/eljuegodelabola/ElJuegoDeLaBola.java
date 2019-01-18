@@ -15,8 +15,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
+import static javafx.scene.input.KeyCode.F11;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.Scale;
 
 /**
  *
@@ -25,8 +28,8 @@ import javafx.scene.input.MouseEvent;
 // BUG IMPORTANTE, GOLPE DERECHO+ GOLPE IZQUIERDO NO HACE ARCO ¿arreglado?
 public class ElJuegoDeLaBola extends Application {
     
-    final double dimensionX = 512;
-    final double dimensionY = 512;
+    double dimensionX = 512;
+    double dimensionY = 512;
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
     double incBolaY = dimensionY/2;
@@ -129,16 +132,35 @@ public class ElJuegoDeLaBola extends Application {
                     System.out.println("GAME OVER");
                     primaryStage.close();
                 }
+                
+//                if (bolaY == 0 && positivo == true){
+//                    incBolaX = 0;
+//                    incBolaX++;
+//                    incBolaY--;
+//                    bolaInicioY = bolaY;
+//                    bolaInicioX = bolaX;
+//                }
 //                
-//                if (bolaY < 0){
-//                    bolaY = dimensionY;
-
+//                if (bolaY == 0 && positivo == false){
+//                    incBolaX = 0;
+//                    incBolaX--;
+//                    incBolaY--;
+//                    bolaInicioY = bolaY;
+//                    bolaInicioX = bolaX;
 //                }
 //                System.out.println("bola X: "+bolaX);
-//                System.out.println("bola Y: "+incBolaY);
+                System.out.println("bola Y: "+incBolaY);
             };
         };
-                 
+                
+        
+        scene.setOnKeyPressed((KeyEvent event) ->{
+                   switch(event.getCode()) {
+                       case F11:
+                           primaryStage.setMaximized(true);
+                           break;
+                   } 
+                });
         bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
