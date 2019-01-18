@@ -34,7 +34,7 @@ public class ElJuegoDeLaBola extends Application {
     double anguloinicial = 88.80;
     boolean golpe = false;
     double gravedad = 9.807;
-    double velocidad = 100;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
+    double velocidad = 150;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
     double radianes = 0;
     double bolaInicioX = dimensionX/2;
     double bolaInicioY = dimensionY/2;
@@ -107,11 +107,21 @@ public class ElJuegoDeLaBola extends Application {
                 //rebote
                 if (bolaX >= dimensionX){
                     positivo = false;
-                    anguloinicial = -anguloinicial;
+                    incBolaX--;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    incBolaX = 0;
                 }
                 
                 if (bolaX <= 0){
                     positivo = true;
+                    incBolaX++;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    anguloinicial=-anguloinicial;
+                    incBolaX = 0;
                 }
                 
                 if (bolaY >= dimensionY){
@@ -122,6 +132,7 @@ public class ElJuegoDeLaBola extends Application {
 //                
 //                if (bolaY < 0){
 //                    bolaY = dimensionY;
+
 //                }
 //                System.out.println("bola X: "+bolaX);
 //                System.out.println("bola Y: "+incBolaY);
@@ -145,6 +156,7 @@ public class ElJuegoDeLaBola extends Application {
                     positivo = false;
                     bolaInicioY = bolaY;
                     bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
                     anguloinicial = -anguloinicial;
                     incBolaX = 0;
                 }
