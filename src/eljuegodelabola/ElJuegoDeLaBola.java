@@ -19,7 +19,6 @@ import static javafx.scene.input.KeyCode.F11;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.transform.Scale;
 
 /**
  *
@@ -58,21 +57,21 @@ public class ElJuegoDeLaBola extends Application {
         bola.setCenterX(0);
         bola.setCenterY(0);
         bola.setRadius(20);
-        bola.setFill(Color.DARKGREEN);
+        bola.setFill(Color.web("#006400"));
         
         // Primer claro
         Circle bolaclaro = new Circle();
         bolaclaro.setCenterX(4);
         bolaclaro.setCenterY(-3);
         bolaclaro.setRadius(15);
-        bolaclaro.setFill(Color.GREEN);
+        bolaclaro.setFill(Color.web("#008000"));
         
         // Segundo claro
         Circle bolablanca = new Circle();
         bolablanca.setCenterX(6);
         bolablanca.setCenterY(-8);
         bolablanca.setRadius(5);
-        bolablanca.setFill(Color.LAWNGREEN);
+        bolablanca.setFill(Color.web("#7CFC00"));
         
         // bola completa
         Group bolaCompleta = new Group();
@@ -86,7 +85,8 @@ public class ElJuegoDeLaBola extends Application {
             public void handle(long now){
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
-
+                
+                
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
                     
@@ -98,6 +98,7 @@ public class ElJuegoDeLaBola extends Application {
                     
                     else if (positivo == false){
                         incBolaX--;
+                        
                     }
                     incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
                     incBolaY = (incBolaY/10);
@@ -108,7 +109,7 @@ public class ElJuegoDeLaBola extends Application {
                 }
                 
                 //rebote
-                if (bolaX >= dimensionX){
+                if ((bolaX+bola.getRadius()) >= dimensionX){   //rebote pared derecha
                     positivo = false;
                     incBolaX--;
                     bolaInicioY = bolaY;
@@ -117,7 +118,7 @@ public class ElJuegoDeLaBola extends Application {
                     incBolaX = 0;
                 }
                 
-                if (bolaX <= 0){
+                if ((bolaX-bola.getRadius()) <= 0){           // rebote pared izquierda
                     positivo = true;
                     incBolaX++;
                     bolaInicioY = bolaY;
@@ -133,23 +134,25 @@ public class ElJuegoDeLaBola extends Application {
                     primaryStage.close();
                 }
                 
-//                if (bolaY == 0 && positivo == true){
-//                    incBolaX = 0;
-//                    incBolaX++;
-//                    incBolaY--;
-//                    bolaInicioY = bolaY;
-//                    bolaInicioX = bolaX;
-//                }
-//                
-//                if (bolaY == 0 && positivo == false){
-//                    incBolaX = 0;
-//                    incBolaX--;
-//                    incBolaY--;
-//                    bolaInicioY = bolaY;
-//                    bolaInicioX = bolaX;
-//                }
+                if ((bolaY-bola.getRadius()) <= 0 && positivo == true){
+                    
+                    incBolaX--;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    anguloinicial=-anguloinicial;
+                    incBolaX = 0;
+                }
+            
+                if ((bolaY-bola.getRadius()) <= 0 && positivo == false){
+                    incBolaX++;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    incBolaX = 0;
+                }
 //                System.out.println("bola X: "+bolaX);
-                System.out.println("bola Y: "+incBolaY);
+//                System.out.println("bola Y: "+incBolaY);
             };
         };
                 
@@ -159,6 +162,9 @@ public class ElJuegoDeLaBola extends Application {
                        case F11:
                            primaryStage.setMaximized(true);
                            break;
+                           
+                       case ESCAPE:
+                           
                    } 
                 });
         bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -173,7 +179,7 @@ public class ElJuegoDeLaBola extends Application {
                 clickY = mouseEvent.getY();
                 System.out.println(clickY);
                 
-                if (clickX >0 && clickX >0){
+                if (clickX >0 && clickY >0){
                     System.out.println("golpe-derecho");
                     positivo = false;
                     bolaInicioY = bolaY;
@@ -183,7 +189,7 @@ public class ElJuegoDeLaBola extends Application {
                     incBolaX = 0;
                 }
                 
-                if (clickX <0 && clickX <0){
+                if (clickX <0 && clickY >0){
                     System.out.println("golpe-izquierdo");
                     positivo = true;
                     bolaInicioY = bolaY;
@@ -194,10 +200,11 @@ public class ElJuegoDeLaBola extends Application {
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
-                    golpe = true;
-                    
-                    
-                    
+                    golpe = true;   
+                }
+                
+                if(mouseEvent.getButton() == MouseButton.SECONDARY) {
+                       
                 }
             }
         });
