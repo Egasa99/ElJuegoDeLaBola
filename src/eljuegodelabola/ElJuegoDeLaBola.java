@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+
 /**
  *
  * @author PC06
@@ -27,22 +28,23 @@ import javafx.scene.input.MouseEvent;
 // BUG IMPORTANTE, GOLPE DERECHO+ GOLPE IZQUIERDO NO HACE ARCO ¿arreglado?
 public class ElJuegoDeLaBola extends Application {
     
-    double dimensionX = 512;
-    double dimensionY = 512;
+    double dimensionX = 512; // dimension eje X
+    double dimensionY = 512; // dimension eje Y
     double bolaX = dimensionX/2;
     double bolaY = dimensionY/2;
-    double incBolaY = dimensionY/2;
-    double incBolaX = 0;
-    double anguloinicial = 88.80;
+    double incBolaY = dimensionY/2; // incremento de bola Y
+    double incBolaX = 0; // incremento de bola X inicialmente nulo
+    double anguloinicial = 88.80; //angulo 
     boolean golpe = false;
     double gravedad = 9.807;
     double velocidad = 150;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
     double radianes = 0;
-    double bolaInicioX = dimensionX/2;
-    double bolaInicioY = dimensionY/2;
+    double bolaInicioX = dimensionX/2; //posicion de la bola
+    double bolaInicioY = dimensionY/2; //posicion de la bola
     double clickX = 0;
     double clickY = 0;
     boolean positivo = false;
+    boolean rebAlto = false;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -51,6 +53,8 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        
         
         // Bola principal
         Circle bola = new Circle();
@@ -116,6 +120,17 @@ public class ElJuegoDeLaBola extends Application {
                     bolaInicioX = bolaX;
                     anguloinicial= Math.abs(anguloinicial);
                     incBolaX = 0;
+                    
+                    if (rebAlto == true){                       // rebote hacia arriba
+                        System.out.println("LISTO");
+                        positivo = false;
+                        incBolaX--;
+                        bolaInicioY = bolaY;
+                        bolaInicioX = bolaX;
+                        anguloinicial= Math.abs(anguloinicial);
+                        anguloinicial=-anguloinicial;
+                        incBolaX = 0;
+                    }
                 }
                 
                 if ((bolaX-bola.getRadius()) <= 0){           // rebote pared izquierda
@@ -126,6 +141,16 @@ public class ElJuegoDeLaBola extends Application {
                     anguloinicial= Math.abs(anguloinicial);
                     anguloinicial=-anguloinicial;
                     incBolaX = 0;
+                    
+                    if (rebAlto == true){
+                        System.out.println("LISTO");
+                        positivo = true;
+                        incBolaX++;
+                        bolaInicioY = bolaY;
+                        bolaInicioX = bolaX;
+                        anguloinicial= Math.abs(anguloinicial);
+                        incBolaX = 0;
+                    }
                 }
                 
                 if (bolaY >= dimensionY){
@@ -175,10 +200,20 @@ public class ElJuegoDeLaBola extends Application {
 //                System.out.println("Raton pulsado en: " + 
 //                        "X " +mouseEvent.getX() + " Y " + mouseEvent.getY());
                 clickX = mouseEvent.getX();
-                System.out.println(clickX);
+//                System.out.println(clickX);
                 clickY = mouseEvent.getY();
-                System.out.println(clickY);
+//                System.out.println(clickY);
                 
+                    if (bolaX <= dimensionX/16){
+                        rebAlto = true;
+                        System.out.println("REBOTE");
+                    }
+                
+                    if (bolaX >= dimensionX-dimensionX/16){
+                        rebAlto = true;
+                        System.out.println("REBOTE");
+                    }
+                    
                 if (clickX >0 && clickY >0){
                     System.out.println("golpe-derecho");
                     positivo = false;
@@ -200,7 +235,8 @@ public class ElJuegoDeLaBola extends Application {
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
-                    golpe = true;   
+                    golpe = true;
+                    
                 }
                 
                 if(mouseEvent.getButton() == MouseButton.SECONDARY) {
