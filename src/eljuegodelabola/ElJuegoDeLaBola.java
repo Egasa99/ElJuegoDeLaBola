@@ -30,14 +30,14 @@ public class ElJuegoDeLaBola extends Application {
     
     double dimensionX = 512; // dimension eje X
     double dimensionY = 512; // dimension eje Y
-    double bolaX = dimensionX/2;
+    double bolaX = dimensionX/2+200;
     double bolaY = dimensionY/2;
     double incBolaY = dimensionY/2; // incremento de bola Y
     double incBolaX = 0; // incremento de bola X inicialmente nulo
     double anguloinicial = 88.80; //angulo 
     boolean golpe = false;
     double gravedad = 9.807;
-    double velocidad = 150;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
+    double velocidad = 125;  // mas grande mas lento, mayor arco;Mas pequeño mas rapido, menor arco
     double radianes = 0;
     double bolaInicioX = dimensionX/2; //posicion de la bola
     double bolaInicioY = dimensionY/2; //posicion de la bola
@@ -45,11 +45,12 @@ public class ElJuegoDeLaBola extends Application {
     double clickY = 0;
     boolean positivo = false;
     boolean rebAlto = false;
+    
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
         Scene scene = new Scene(root, dimensionX, dimensionY);
-        scene.setFill(Color.BLACK);
+        scene.setFill(Color.web("#000000"));
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -120,18 +121,20 @@ public class ElJuegoDeLaBola extends Application {
                     bolaInicioX = bolaX;
                     anguloinicial= Math.abs(anguloinicial);
                     incBolaX = 0;
-                    
-                    if (rebAlto == true){                       // rebote hacia arriba
-                        System.out.println("LISTO");
-                        positivo = false;
-                        incBolaX--;
-                        bolaInicioY = bolaY;
-                        bolaInicioX = bolaX;
-                        anguloinicial= Math.abs(anguloinicial);
-                        anguloinicial=-anguloinicial;
-                        incBolaX = 0;
-                    }
                 }
+                    
+                if  (((bolaX+bola.getRadius()) >= dimensionX)&&(rebAlto == true)){                       // rebote hacia arriba
+                    System.out.println("LISTO");
+                    positivo = false;
+                    incBolaX--;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    anguloinicial=-anguloinicial;
+                    incBolaX = 0;
+                    rebAlto = false;
+                }
+                
                 
                 if ((bolaX-bola.getRadius()) <= 0){           // rebote pared izquierda
                     positivo = true;
@@ -142,14 +145,15 @@ public class ElJuegoDeLaBola extends Application {
                     anguloinicial=-anguloinicial;
                     incBolaX = 0;
                     
-                    if (rebAlto == true){
-                        System.out.println("LISTO");
-                        positivo = true;
-                        incBolaX++;
-                        bolaInicioY = bolaY;
-                        bolaInicioX = bolaX;
-                        anguloinicial= Math.abs(anguloinicial);
-                        incBolaX = 0;
+                if (((bolaX-bola.getRadius()) <= 0)&&(rebAlto == true)){
+                    System.out.println("LISTO");
+                    positivo = true;
+                    incBolaX++;
+                    bolaInicioY = bolaY;
+                    bolaInicioX = bolaX;
+                    anguloinicial= Math.abs(anguloinicial);
+                    incBolaX = 0;
+                    rebAlto = false;
                     }
                 }
                 
@@ -204,14 +208,12 @@ public class ElJuegoDeLaBola extends Application {
                 clickY = mouseEvent.getY();
 //                System.out.println(clickY);
                 
-                    if (bolaX <= dimensionX/16){
+                    if ((bolaX <= dimensionX/8 )||(bolaX >= dimensionX-dimensionX/8)){
                         rebAlto = true;
                         System.out.println("REBOTE");
                     }
-                
-                    if (bolaX >= dimensionX-dimensionX/16){
-                        rebAlto = true;
-                        System.out.println("REBOTE");
+                    else {
+                        rebAlto = false;
                     }
                     
                 if (clickX >0 && clickY >0){
@@ -236,11 +238,9 @@ public class ElJuegoDeLaBola extends Application {
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
                 if(mouseEvent.getButton() == MouseButton.PRIMARY) {
                     golpe = true;
-                    
                 }
                 
                 if(mouseEvent.getButton() == MouseButton.SECONDARY) {
-                       
                 }
             }
         });
