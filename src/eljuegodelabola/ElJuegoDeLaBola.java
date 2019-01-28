@@ -8,6 +8,8 @@ package eljuegodelabola;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -20,11 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.transform.Scale;
+import javafx.beans.value.ChangeListener;
 
 
 /**
@@ -57,14 +60,15 @@ public class ElJuegoDeLaBola extends Application {
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
-        Scene scene = new Scene(root, dimensionX, dimensionY);
+        Pane root2 = new Pane();
+        Scene sceneBola = new Scene(root, dimensionX, dimensionY,Color.web("#000000"));
+        Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
         primaryStage.setResizable(false);
         primaryStage.setFullScreenExitHint("");
-        scene.setFill(Color.web("#000000"));
-        
-        
-        
-        // menu
+        root.setStyle("-fx-background-color: transparent;");
+        root2.setStyle("-fx-background-color: transparent;");  
+
+// menu
         
         Button button = new Button();
         button.setText("Empezar");
@@ -72,32 +76,54 @@ public class ElJuegoDeLaBola extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                primaryStage.setScene(scene);
+                primaryStage.setScene(sceneBola);
             }
         });
         Label label = new Label("Tamaño bola");
+        Label label5 = new Label("");
         Slider slider = new Slider(1, 10, 1);
-        slider.setShowTickMarks(true);
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    label5.setText(String.format("%1.0f", new_val));
+            }
+        });
+        
         Label label2 = new Label("NumBola");
+        Label label6 = new Label("");
         Slider slider2 = new Slider(1, 10, 1);
-        slider2.setShowTickMarks(true);
+        slider2.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    label6.setText(String.format("%1.0f", new_val));
+            }
+        });
         Label label3 = new Label("Color de la bola");
         ChoiceBox choiceBox = new ChoiceBox();
-        choiceBox.getItems().add("Verde");
-        choiceBox.getItems().add("Amarillo");
-        choiceBox.getItems().add("Azul");
-        choiceBox.getItems().add("Rojo");
-        VBox vbox= new VBox(label,slider,label2,slider2,label3,choiceBox,button);
-    
-        Scene menu = new Scene(vbox, dimensionX, dimensionY);
-        menu.setFill(Color.web("#000000"));
+        choiceBox.setItems(FXCollections.observableArrayList(
+        "Verde", "Rojo", "Amarillo", "Azul"));
+        choiceBox.setTooltip(new Tooltip("Selecciona el tipo de bola"));
+
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() { 
+
+			// if the item of the list is changed 
+			public void changed(ObservableValue ov, Number value, Number new_value) 
+			{ 
+				// set the text for the label to the selected item 
+				System.out.println(choiceBox.getValue());
+			} 
+		}); 
         
+        VBox vbox= new VBox(label,slider,label5,label2,slider2,label6,label3,choiceBox,button);
+        
+        root2.getChildren().add(vbox);
         
         // menu
         
         primaryStage.setTitle("El juego de la bola");
-        primaryStage.setScene(menu);
+        primaryStage.setScene(sceneMenu);
         primaryStage.show();
+        
         // Bola principal
         Circle bola = new Circle();
         bola.setCenterX(0);
@@ -126,11 +152,7 @@ public class ElJuegoDeLaBola extends Application {
         bolaCompleta.getChildren().add(bolablanca);
         root.getChildren().add(bolaCompleta);
 
-        Scale scale = new Scale();
-                scale.setX(escalaX);
-                scale.setY(escalaY);
-                scale.setPivotX(bola.getRadius()*2);
-                scale.setPivotY(bola.getRadius()*2);
+
                 
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
@@ -138,8 +160,6 @@ public class ElJuegoDeLaBola extends Application {
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
                 
-                
-                bolaCompleta.getTransforms().add(scale);
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
                     
@@ -260,11 +280,11 @@ public class ElJuegoDeLaBola extends Application {
                 incBolaX = 0;
                 rebAlto = false;
             }
-
+            
         };
                 
         
-        scene.setOnKeyPressed((KeyEvent event) ->{
+        sceneBola.setOnKeyPressed((KeyEvent event) ->{
                    switch(event.getCode()) {
                        case F10:
                            dimensionX = 716.8;
@@ -313,12 +333,19 @@ public class ElJuegoDeLaBola extends Application {
                         rebAlto = false;
                     }
                     
-                if (clickX >0 && clickY >0){
+                if (clickX>0 && clickY>0){
                     clickDerecho();
                 }
                 
-                if (clickX <0 && clickY >0){
+                if(clickX>0 && clickY<0){
+                    clickDerechoSuperior();
+                }
+                if (clickX<0 && clickY>0){
                     clickIzquierdo();
+                }
+                
+                if(clickX<0 && clickY<0){
+                    clickIzquierdoSuperior();
                 }
                 // También se puede comprobar sobre qué botón se ha actuado,
                 //  válido para cualquier acción (pressed, released, clicked, etc) 
@@ -327,6 +354,8 @@ public class ElJuegoDeLaBola extends Application {
                 }
                 
                 if(mouseEvent.getButton() == MouseButton.SECONDARY) {
+                    System.out.println(clickX);
+                    System.out.println(clickY);
                 }
             }
             
@@ -339,6 +368,24 @@ public class ElJuegoDeLaBola extends Application {
                 incBolaX = 0;
             }
             
+            public void clickIzquierdoSuperior(){
+                System.out.println("golpe-superior-izquierdo");
+                incBolaX--;
+                bolaInicioY = bolaY;
+                bolaInicioX = bolaX;
+                anguloinicial= Math.abs(anguloinicial);
+                anguloinicial=-anguloinicial;
+                incBolaX = 0;
+            }
+            
+            public void clickDerechoSuperior(){
+                System.out.println("golpe-superior-derecho");
+                incBolaX++;
+                bolaInicioY = bolaY;
+                bolaInicioX = bolaX;
+                anguloinicial= Math.abs(anguloinicial);
+                incBolaX = 0;
+            }
             public void clickDerecho(){
                 System.out.println("golpe-derecho");
                 positivo = false;
