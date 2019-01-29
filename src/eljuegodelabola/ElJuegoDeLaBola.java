@@ -6,6 +6,7 @@
 package eljuegodelabola;
 
 
+import java.io.File;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -28,6 +29,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
 
 /**
@@ -65,6 +69,8 @@ public class ElJuegoDeLaBola extends Application {
         Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
         primaryStage.setResizable(false);
         primaryStage.setFullScreenExitHint("");
+        primaryStage.setWidth(dimensionX);
+        primaryStage.setHeight(dimensionY);
         root.setStyle("-fx-background-color: transparent;");
         root2.setStyle("-fx-background-color: transparent;");  
 
@@ -113,10 +119,22 @@ public class ElJuegoDeLaBola extends Application {
 				System.out.println(choiceBox.getValue());
 			} 
 		}); 
+        Button button2 = new Button();
+        button2.setText("Cargar Imagen");
+        button2.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Resource File");
+
+            }
+        });
         
-        VBox vbox= new VBox(label,slider,label5,label2,slider2,label6,label3,choiceBox,button);
         
+        VBox vbox= new VBox(label,slider,label5,label2,slider2,label6,label3,choiceBox,button2,button);
         root2.getChildren().add(vbox);
+        
         
         // menu
         
@@ -150,9 +168,11 @@ public class ElJuegoDeLaBola extends Application {
         bolaCompleta.getChildren().add(bola);
         bolaCompleta.getChildren().add(bolaclaro);
         bolaCompleta.getChildren().add(bolablanca);
+        
+        
         root.getChildren().add(bolaCompleta);
-
-
+        
+        
                 
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
@@ -166,10 +186,16 @@ public class ElJuegoDeLaBola extends Application {
                     
                     if (positivo == true){
                         incBolaX++;
+//                        if (image != null){
+//                            image.setRotate(20);
+//                        }
                     }
                     
                     else if (positivo == false){
                         incBolaX--;
+//                        if (image != null){
+//                            image.setRotate(-20);
+//                        }
                     }
                     movimiento();
                     
@@ -292,7 +318,12 @@ public class ElJuegoDeLaBola extends Application {
                            primaryStage.setFullScreen(false);
                            primaryStage.setWidth(dimensionX);
                            primaryStage.setHeight(dimensionY);
-                           
+                           golpe = false;
+                           bolaInicioX= dimensionX/2;
+                           bolaInicioY= dimensionY/2;
+                           incBolaX = 0;
+                           bolaX = dimensionX/2;
+                           bolaY = dimensionY/2;
                            break;
                            
                        case F11:
@@ -301,7 +332,12 @@ public class ElJuegoDeLaBola extends Application {
                            primaryStage.setWidth(dimensionX);
                            primaryStage.setHeight(dimensionY);
                            primaryStage.setFullScreen(true);
-                           
+                           golpe = false;
+                           bolaInicioX= dimensionX/2;
+                           bolaInicioY= dimensionY/2;
+                           incBolaX = 0;
+                           bolaX = dimensionX/2;
+                           bolaY = dimensionY/2;
                            break;
                            
                        case ESCAPE:
@@ -310,7 +346,12 @@ public class ElJuegoDeLaBola extends Application {
                            primaryStage.setFullScreen(false);
                            primaryStage.setWidth(dimensionX);
                            primaryStage.setHeight(dimensionY);
-                           
+                           golpe = false;
+                           bolaInicioX= dimensionX/2;
+                           bolaInicioY= dimensionY/2;
+                           incBolaX = 0;
+                           bolaX = dimensionX/2;
+                           bolaY = dimensionY/2;
                            break;
                    } 
                 });
