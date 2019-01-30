@@ -7,6 +7,9 @@ package eljuegodelabola;
 
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -60,7 +63,7 @@ public class ElJuegoDeLaBola extends Application {
     boolean rebAlto = false;
     double escalaX = 1;
     double escalaY = 1;
-    
+    ImageView imageView;
     @Override
     public void start(Stage primaryStage) {       
         Pane root = new Pane();
@@ -125,9 +128,24 @@ public class ElJuegoDeLaBola extends Application {
             
             @Override
             public void handle(ActionEvent event) {
+                
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open Resource File");
-
+                fileChooser.setTitle("Usar imagen bola");
+                
+                FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+                fileChooser.getExtensionFilters().addAll(extFilterPNG);
+                File file = fileChooser.showOpenDialog(null);
+                String localUrl = null;
+                try {
+                    localUrl = file.toURI().toURL().toString();
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(ElJuegoDeLaBola.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Image image = new Image(localUrl);
+                imageView = new ImageView(image);
+                imageView.setFitHeight(40);
+                imageView.setFitHeight(40);
+                System.out.println("Hola");
             }
         });
         
@@ -137,7 +155,6 @@ public class ElJuegoDeLaBola extends Application {
         
         
         // menu
-        
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
@@ -168,7 +185,11 @@ public class ElJuegoDeLaBola extends Application {
         bolaCompleta.getChildren().add(bola);
         bolaCompleta.getChildren().add(bolaclaro);
         bolaCompleta.getChildren().add(bolablanca);
-        
+        System.out.println("Hola2");
+        if (imageView != null){
+        bolaCompleta.getChildren().add(imageView);
+        System.out.println("Adios");
+        }
         
         root.getChildren().add(bolaCompleta);
         
