@@ -63,11 +63,150 @@ public class ElJuegoDeLaBola extends Application {
     boolean rebAlto = false;
     double escalaX = 1;
     double escalaY = 1;
+    boolean rotacion = false;
     ImageView imageView;
+    Circle bola;
+    Pane root;
+    Pane root2;
+    Group bolaCompleta;
+    
+    public void movimiento(){
+        incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
+        incBolaY = (incBolaY/10);
+                    
+        bolaY = bolaInicioY + incBolaY;
+        bolaX = bolaInicioX + incBolaX;
+    }
+    public void reinicio(){
+        golpe = false;
+        bolaInicioX= dimensionX/2;
+        bolaInicioY= dimensionY/2;
+        incBolaX = 0;
+        bolaX = dimensionX/2;
+        bolaY = dimensionY/2;
+        root.getChildren().add(bolaCompleta);
+    }
+    public void reboteizquierda(){
+        positivo = true;
+        incBolaX++;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        anguloinicial=-anguloinicial;
+        incBolaX = 0;
+    }
+    public void rebotederecha(){
+        positivo = false;
+        incBolaX--;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        incBolaX = 0;
+    }
+    public void rebotearribaizquierda(){
+        positivo = true;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        anguloinicial=-anguloinicial;
+        incBolaX = 0;
+    }
+    public void rebotearribaderecha(){
+        positivo = false;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        incBolaX = 0;
+    }
+    public void rebotederechahaciaarriba(){
+        System.out.println("LISTO");
+        positivo = false;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        anguloinicial=-anguloinicial;
+        incBolaX = 0;
+        rebAlto = false;
+    }
+    public void reboteizquierdahaciaarriba(){
+        System.out.println("LISTO");
+        positivo = true;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        incBolaX = 0;
+        rebAlto = false;
+    }
+    public Group bolaFinal(){         
+        bola = new Circle();
+        bola.setCenterX(0);
+        bola.setCenterY(0);
+        bola.setRadius(20);
+        bola.setFill(Color.web("#006400"));
+        // Primer claro
+        Circle bolaclaro = new Circle();
+        bolaclaro.setCenterX(4);
+        bolaclaro.setCenterY(-3);
+        bolaclaro.setRadius(15);
+        bolaclaro.setFill(Color.web("#008000"));
+        
+        // Segundo claro
+        Circle bolablanca = new Circle();
+        bolablanca.setCenterX(6);
+        bolablanca.setCenterY(-8);
+        bolablanca.setRadius(5);
+        bolablanca.setFill(Color.web("#7CFC00"));
+        
+        // bola completa
+        bolaCompleta = new Group();
+        bolaCompleta.getChildren().add(bola);
+        bolaCompleta.getChildren().add(bolaclaro);
+        bolaCompleta.getChildren().add(bolablanca);
+        System.out.println("Hola2");
+        if (imageView != null){
+        bolaCompleta.getChildren().add(imageView);
+        }
+        root.getChildren().add(bolaCompleta);
+        return bolaCompleta;
+    }
+    public void clickIzquierdo(){
+        System.out.println("golpe-izquierdo");
+        positivo = true;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        incBolaX = 0;
+    }     
+    public void clickIzquierdoSuperior(){
+        System.out.println("golpe-superior-izquierdo");
+        positivo = true;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        anguloinicial=-anguloinicial;
+        incBolaX = 0;
+    }
+    public void clickDerechoSuperior(){
+        System.out.println("golpe-superior-derecho");
+        positivo = false;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        incBolaX = 0;
+    }
+    public void clickDerecho(){
+        System.out.println("golpe-derecho");
+        positivo = false;
+        bolaInicioY = bolaY;
+        bolaInicioX = bolaX;
+        anguloinicial= Math.abs(anguloinicial);
+        anguloinicial = -anguloinicial;
+        incBolaX = 0;
+    }
     @Override
     public void start(Stage primaryStage) {       
-        Pane root = new Pane();
-        Pane root2 = new Pane();
+        root = new Pane();
+        root2 = new Pane();
         Scene sceneBola = new Scene(root, dimensionX, dimensionY,Color.web("#000000"));
         Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
         primaryStage.setResizable(false);
@@ -78,7 +217,6 @@ public class ElJuegoDeLaBola extends Application {
         root2.setStyle("-fx-background-color: transparent;");  
 
 // menu
-        
         Button button = new Button();
         button.setText("Empezar");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -86,6 +224,7 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.setScene(sceneBola);
+                bolaFinal();
             }
         });
         Label label = new Label("Tamaño bola");
@@ -143,8 +282,8 @@ public class ElJuegoDeLaBola extends Application {
                 }
                 Image image = new Image(localUrl);
                 imageView = new ImageView(image);
-                imageView.setFitHeight(40);
-                imageView.setFitHeight(40);
+                imageView.setFitHeight(bola.getRadius()*2);
+                imageView.setFitWidth(bola.getRadius()*2);
                 System.out.println("Hola");
             }
         });
@@ -154,85 +293,47 @@ public class ElJuegoDeLaBola extends Application {
         root2.getChildren().add(vbox);
         
         
-        // menu
+// menu
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
-        
-        // Bola principal
-        Circle bola = new Circle();
-        bola.setCenterX(0);
-        bola.setCenterY(0);
-        bola.setRadius(20);
-        bola.setFill(Color.web("#006400"));
-        
-        // Primer claro
-        Circle bolaclaro = new Circle();
-        bolaclaro.setCenterX(4);
-        bolaclaro.setCenterY(-3);
-        bolaclaro.setRadius(15);
-        bolaclaro.setFill(Color.web("#008000"));
-        
-        // Segundo claro
-        Circle bolablanca = new Circle();
-        bolablanca.setCenterX(6);
-        bolablanca.setCenterY(-8);
-        bolablanca.setRadius(5);
-        bolablanca.setFill(Color.web("#7CFC00"));
-        
-        // bola completa
-        Group bolaCompleta = new Group();
-        bolaCompleta.getChildren().add(bola);
-        bolaCompleta.getChildren().add(bolaclaro);
-        bolaCompleta.getChildren().add(bolablanca);
-        System.out.println("Hola2");
-        if (imageView != null){
-        bolaCompleta.getChildren().add(imageView);
-        System.out.println("Adios");
-        }
-        
-        root.getChildren().add(bolaCompleta);
-        
-        
-                
+
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
-                
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
                     
-                    
                     if (positivo == true){
                         incBolaX++;
-//                        if (image != null){
-//                            image.setRotate(20);
-//                        }
+                        if (imageView != null){
+                            imageView.setRotate(20);
+                        }
                     }
                     
                     else if (positivo == false){
                         incBolaX--;
-//                        if (image != null){
-//                            image.setRotate(-20);
-//                        }
+                        if (imageView != null){
+                            imageView.setRotate(-20);
+                        }
                     }
                     movimiento();
                     
                 }
                 
+                
                 //rebote
-                if ((bolaX+bola.getRadius()) >= dimensionX){   //rebote pared derecha
+                if ((bolaX+bola.getRadius()) >= dimensionX){ //rebote pared derecha
                     rebotederecha();
                 }
                     
-                if  (((bolaX+bola.getRadius()) >= dimensionX)&&(rebAlto == true)){                       // rebote hacia arriba
+                if  (((bolaX+bola.getRadius()) >= dimensionX)&&(rebAlto == true)){ // rebote hacia arriba
                     rebotederechahaciaarriba();
                 }
-                
-                
-                if ((bolaX-bola.getRadius()) <= 0){           // rebote pared izquierda
+
+                if ((bolaX-bola.getRadius()) <= 0){ // rebote pared izquierda
                     reboteizquierda();
                 }    
                 if (((bolaX-bola.getRadius()) <= 0)&&(rebAlto == true)){
@@ -258,125 +359,63 @@ public class ElJuegoDeLaBola extends Application {
 
             };
             
-            public void movimiento(){
-                incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
-                    incBolaY = (incBolaY/10);
-                    
-                    bolaY = bolaInicioY + incBolaY;
-                    bolaX = bolaInicioX + incBolaX;
-            }
-            public void reinicio(){
-                golpe = false;
-                bolaInicioX= dimensionX/2;
-                bolaInicioY= dimensionY/2;
-                incBolaX = 0;
-                bolaX = dimensionX/2;
-                bolaY = dimensionY/2;
-                root.getChildren().add(bolaCompleta);
-            }
-            public void reboteizquierda(){
-                positivo = true;
-                incBolaX++;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                anguloinicial=-anguloinicial;
-                incBolaX = 0;
-            }
-            public void rebotederecha(){
-                positivo = false;
-                incBolaX--;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                incBolaX = 0;
-            }
-            public void rebotearribaizquierda(){
-                incBolaX--;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                anguloinicial=-anguloinicial;
-                incBolaX = 0;
-            }
-            public void rebotearribaderecha(){
-                incBolaX++;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                incBolaX = 0;
-            }
-            public void rebotederechahaciaarriba(){
-                System.out.println("LISTO");
-                positivo = false;
-                incBolaX--;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                anguloinicial=-anguloinicial;
-                incBolaX = 0;
-                rebAlto = false;
-            }
-            public void reboteizquierdahaciaarriba(){
-                System.out.println("LISTO");
-                positivo = true;
-                incBolaX++;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                incBolaX = 0;
-                rebAlto = false;
-            }
             
+ 
         };
                 
         
         sceneBola.setOnKeyPressed((KeyEvent event) ->{
                    switch(event.getCode()) {
-                       case F10:
-                           dimensionX = 716.8;
-                           dimensionY = 716.8;
-                           primaryStage.setFullScreen(false);
-                           primaryStage.setWidth(dimensionX);
-                           primaryStage.setHeight(dimensionY);
-                           golpe = false;
-                           bolaInicioX= dimensionX/2;
-                           bolaInicioY= dimensionY/2;
-                           incBolaX = 0;
-                           bolaX = dimensionX/2;
-                           bolaY = dimensionY/2;
-                           break;
+                        case F9:
+                            dimensionX = 512;
+                            dimensionY = 512;
+                            primaryStage.setFullScreen(false);
+                            primaryStage.setWidth(dimensionX);
+                            primaryStage.setHeight(dimensionY);
+                            golpe = false;
+                            bolaInicioX= dimensionX/2;
+                            bolaInicioY= dimensionY/2;
+                            incBolaX = 0;
+                            bolaX = dimensionX/2;
+                            bolaY = dimensionY/2;
+                            break;
+                       
+                        case F10:
+                            dimensionX = 716.8;
+                            dimensionY = 716.8;
+                            primaryStage.setFullScreen(false);
+                            primaryStage.setWidth(dimensionX);
+                            primaryStage.setHeight(dimensionY);
+                            golpe = false;
+                            bolaInicioX= dimensionX/2;
+                            bolaInicioY= dimensionY/2;
+                            incBolaX = 0;
+                            bolaX = dimensionX/2;
+                            bolaY = dimensionY/2;
+                            break;
                            
-                       case F11:
-                           dimensionX = 1366;
-                           dimensionY = 768;
-                           primaryStage.setWidth(dimensionX);
-                           primaryStage.setHeight(dimensionY);
-                           primaryStage.setFullScreen(true);
-                           golpe = false;
-                           bolaInicioX= dimensionX/2;
-                           bolaInicioY= dimensionY/2;
-                           incBolaX = 0;
-                           bolaX = dimensionX/2;
-                           bolaY = dimensionY/2;
-                           break;
+                        case F11:
+                            dimensionX = 1366;
+                            dimensionY = 768;
+                            primaryStage.setWidth(dimensionX);
+                            primaryStage.setHeight(dimensionY);
+                            primaryStage.setFullScreen(true);
+                            golpe = false;
+                            bolaInicioX= dimensionX/2;
+                            bolaInicioY= dimensionY/2;
+                            incBolaX = 0;
+                            bolaX = dimensionX/2;
+                            bolaY = dimensionY/2;
+                            break;
+
+                        case ESCAPE:
+                            primaryStage.setScene(sceneMenu);
+                            golpe = false;
+                            break;
                            
-                       case ESCAPE:
-                           dimensionX = 512;
-                           dimensionY = 512;
-                           primaryStage.setFullScreen(false);
-                           primaryStage.setWidth(dimensionX);
-                           primaryStage.setHeight(dimensionY);
-                           golpe = false;
-                           bolaInicioX= dimensionX/2;
-                           bolaInicioY= dimensionY/2;
-                           incBolaX = 0;
-                           bolaX = dimensionX/2;
-                           bolaY = dimensionY/2;
-                           break;
                    } 
                 });
-        bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        bolaFinal().setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
@@ -399,14 +438,14 @@ public class ElJuegoDeLaBola extends Application {
                     clickDerecho();
                 }
                 
-                if(clickX>0 && clickY<0){
+                if(clickX>-11 && clickY<0){
                     clickDerechoSuperior();
                 }
                 if (clickX<0 && clickY>0){
                     clickIzquierdo();
                 }
                 
-                if(clickX<0 && clickY<0){
+                if(clickX<11 && clickY<0){
                     clickIzquierdoSuperior();
                 }
                 // También se puede comprobar sobre qué botón se ha actuado,
@@ -416,50 +455,12 @@ public class ElJuegoDeLaBola extends Application {
                 }
                 
                 if(mouseEvent.getButton() == MouseButton.SECONDARY) {
-                    System.out.println(clickX);
-                    System.out.println(clickY);
+                    System.out.println("X: "+clickX);
+                    System.out.println("Y: "+clickY);
                 }
-            }
-            
-            public void clickIzquierdo(){
-                System.out.println("golpe-izquierdo");
-                positivo = true;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                incBolaX = 0;
-            }
-            
-            public void clickIzquierdoSuperior(){
-                System.out.println("golpe-superior-izquierdo");
-                incBolaX--;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                anguloinicial=-anguloinicial;
-                incBolaX = 0;
-            }
-            
-            public void clickDerechoSuperior(){
-                System.out.println("golpe-superior-derecho");
-                incBolaX++;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                incBolaX = 0;
-            }
-            public void clickDerecho(){
-                System.out.println("golpe-derecho");
-                positivo = false;
-                bolaInicioY = bolaY;
-                bolaInicioX = bolaX;
-                anguloinicial= Math.abs(anguloinicial);
-                anguloinicial = -anguloinicial;
-                incBolaX = 0;
-            }        
+            }     
         });
           animationBall.start();      
     }
-
 }
 
