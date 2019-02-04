@@ -137,7 +137,7 @@ public class ElJuegoDeLaBola extends Application {
         incBolaX = 0;
         rebAlto = false;
     }
-    public Group bolaFinal(){         
+    public Group bolaCreacion(){         
         bola = new Circle();
         bola.setCenterX(0);
         bola.setCenterY(0);
@@ -157,17 +157,17 @@ public class ElJuegoDeLaBola extends Application {
         bolablanca.setRadius(5);
         bolablanca.setFill(Color.web("#7CFC00"));
         
-        // bola completa
-        bolaCompleta = new Group();
-        bolaCompleta.getChildren().add(bola);
-        bolaCompleta.getChildren().add(bolaclaro);
-        bolaCompleta.getChildren().add(bolablanca);
+        // Grupo de la Bola
+        Group groupBola = new Group();
+        groupBola.getChildren().add(bola);
+        groupBola.getChildren().add(bolaclaro);
+        groupBola.getChildren().add(bolablanca);
         System.out.println("Hola2");
         if (imageView != null){
-        bolaCompleta.getChildren().add(imageView);
+        groupBola.getChildren().add(imageView);
         }
-        root.getChildren().add(bolaCompleta);
-        return bolaCompleta;
+        root.getChildren().add(groupBola);
+        return groupBola;
     }
     public void clickIzquierdo(){
         System.out.println("golpe-izquierdo");
@@ -207,6 +207,7 @@ public class ElJuegoDeLaBola extends Application {
     public void start(Stage primaryStage) {       
         root = new Pane();
         root2 = new Pane();
+        bolaCompleta = bolaCreacion();
         Scene sceneBola = new Scene(root, dimensionX, dimensionY,Color.web("#000000"));
         Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
         primaryStage.setResizable(false);
@@ -224,7 +225,7 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.setScene(sceneBola);
-                bolaFinal();
+                bolaCreacion();
             }
         });
         Label label = new Label("Tamaño bola");
@@ -259,6 +260,7 @@ public class ElJuegoDeLaBola extends Application {
 			{ 
 				// set the text for the label to the selected item 
 				System.out.println(choiceBox.getValue());
+
 			} 
 		}); 
         Button button2 = new Button();
@@ -301,15 +303,22 @@ public class ElJuegoDeLaBola extends Application {
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
+
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
+                
+                if (imageView != null){
+                        imageView.setLayoutX(bolaX-bola.getRadius());
+                        imageView.setLayoutY(bolaY-bola.getRadius());
+                        }
+                
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
-                    
+                                        
                     if (positivo == true){
                         incBolaX++;
                         if (imageView != null){
-                            imageView.setRotate(20);
+                            imageView.setRotate(20);                            
                         }
                     }
                     
@@ -354,8 +363,6 @@ public class ElJuegoDeLaBola extends Application {
                 if ((bolaY-bola.getRadius()) <= 0 && positivo == false){
                     rebotearribaderecha();
                 }
-//                System.out.println("bola X: "+bolaX);
-//                System.out.println("bola Y: "+incBolaY);
 
             };
             
@@ -366,6 +373,7 @@ public class ElJuegoDeLaBola extends Application {
         
         sceneBola.setOnKeyPressed((KeyEvent event) ->{
                    switch(event.getCode()) {
+                        
                         case F9:
                             dimensionX = 512;
                             dimensionY = 512;
@@ -411,11 +419,19 @@ public class ElJuegoDeLaBola extends Application {
                         case ESCAPE:
                             primaryStage.setScene(sceneMenu);
                             golpe = false;
+                            bolaInicioX= dimensionX/2;
+                            bolaInicioY= dimensionY/2;
+                            incBolaX = 0;
+                            bolaX = dimensionX/2;
+                            bolaY = dimensionY/2;
+                            if (imageView != null){
+                            imageView.setImage(null);
+                            }
                             break;
                            
                    } 
                 });
-        bolaFinal().setOnMouseReleased(new EventHandler<MouseEvent>() {
+        bolaCompleta.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // Insertar aquí el código a ejecutar cuando se haga clic en el ratón
@@ -426,7 +442,7 @@ public class ElJuegoDeLaBola extends Application {
                 clickY = mouseEvent.getY();
 //                System.out.println(clickY);
                 
-                    if ((bolaX <= dimensionX/8 )||(bolaX >= dimensionX-dimensionX/8)){
+                    if ((bolaX <= dimensionX/16 )||(bolaX >= dimensionX-dimensionX/16)){
                         rebAlto = true;
                         System.out.println("REBOTE");
                     }
@@ -438,14 +454,14 @@ public class ElJuegoDeLaBola extends Application {
                     clickDerecho();
                 }
                 
-                if(clickX>-11 && clickY<0){
+                if(clickX>0 && clickY<0){
                     clickDerechoSuperior();
                 }
                 if (clickX<0 && clickY>0){
                     clickIzquierdo();
                 }
                 
-                if(clickX<11 && clickY<0){
+                if(clickX<0 && clickY<0){
                     clickIzquierdoSuperior();
                 }
                 // También se puede comprobar sobre qué botón se ha actuado,
