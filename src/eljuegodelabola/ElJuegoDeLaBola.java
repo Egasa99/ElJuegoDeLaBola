@@ -64,6 +64,10 @@ public class ElJuegoDeLaBola extends Application {
     double escalaX = 1;
     double escalaY = 1;
     boolean rotacion = false;
+    String color1="#006400";
+    String color2="#008000";
+    String color3="#7CFC00";
+    
     ImageView imageView;
     Circle bola;
     Pane root;
@@ -142,20 +146,20 @@ public class ElJuegoDeLaBola extends Application {
         bola.setCenterX(0);
         bola.setCenterY(0);
         bola.setRadius(20);
-        bola.setFill(Color.web("#006400"));
+        bola.setFill(Color.web(color1));
         // Primer claro
         Circle bolaclaro = new Circle();
         bolaclaro.setCenterX(4);
         bolaclaro.setCenterY(-3);
         bolaclaro.setRadius(15);
-        bolaclaro.setFill(Color.web("#008000"));
+        bolaclaro.setFill(Color.web(color2));
         
         // Segundo claro
         Circle bolablanca = new Circle();
         bolablanca.setCenterX(6);
         bolablanca.setCenterY(-8);
         bolablanca.setRadius(5);
-        bolablanca.setFill(Color.web("#7CFC00"));
+        bolablanca.setFill(Color.web(color3));
         
         // Grupo de la Bola
         Group groupBola = new Group();
@@ -216,7 +220,7 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setHeight(dimensionY);
         root.setStyle("-fx-background-color: transparent;");
         root2.setStyle("-fx-background-color: transparent;");  
-
+        
 // menu
         Button button = new Button();
         button.setText("Empezar");
@@ -225,7 +229,7 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.setScene(sceneBola);
-                bolaCreacion();
+                bolaCreacion();                
             }
         });
         Label label = new Label("Tamaño bola");
@@ -252,17 +256,15 @@ public class ElJuegoDeLaBola extends Application {
         choiceBox.setItems(FXCollections.observableArrayList(
         "Verde", "Rojo", "Amarillo", "Azul"));
         choiceBox.setTooltip(new Tooltip("Selecciona el tipo de bola"));
-
+        choiceBox.getSelectionModel().selectFirst();
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() { 
 
 			// if the item of the list is changed 
-			public void changed(ObservableValue ov, Number value, Number new_value) 
-			{ 
-				// set the text for the label to the selected item 
-				System.out.println(choiceBox.getValue());
-
-			} 
-		}); 
+			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                            System.out.println(choiceBox.getItems().get((Integer) number2));
+                            
+                        } 
+	}); 
         Button button2 = new Button();
         button2.setText("Cargar Imagen");
         button2.setOnAction(new EventHandler<ActionEvent>() {
@@ -299,11 +301,11 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
-
+        
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
-
+                
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
                 
@@ -442,7 +444,7 @@ public class ElJuegoDeLaBola extends Application {
                 clickY = mouseEvent.getY();
 //                System.out.println(clickY);
                 
-                    if ((bolaX <= dimensionX/16 )||(bolaX >= dimensionX-dimensionX/16)){
+                    if ((bolaX <= dimensionX/10.66 )||(bolaX >= dimensionX-dimensionX/10.66)){
                         rebAlto = true;
                         System.out.println("REBOTE");
                     }
