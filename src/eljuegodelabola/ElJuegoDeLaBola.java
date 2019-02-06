@@ -73,7 +73,6 @@ public class ElJuegoDeLaBola extends Application {
     Pane root;
     Pane root2;
     Group bolaCompleta;
-    Group groupBola;
     public void movimiento(){
         incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
         incBolaY = (incBolaY/10);
@@ -154,7 +153,7 @@ public class ElJuegoDeLaBola extends Application {
         bolablanca.setFill(Color.web(color3));
         System.out.println("bola3");
         // Grupo de la Bola
-        groupBola = new Group();
+        Group groupBola = new Group();
         groupBola.getChildren().add(bola);
         groupBola.getChildren().add(bolaclaro);
         groupBola.getChildren().add(bolablanca);
@@ -291,8 +290,12 @@ public class ElJuegoDeLaBola extends Application {
                 imageView = new ImageView(image);
                 imageView.setFitHeight(bola.getRadius()*2);
                 imageView.setFitWidth(bola.getRadius()*2);
+                System.out.println(imageView.getFitHeight());
+                System.out.println(imageView.getFitWidth());
+                imageView.setLayoutX(-bola.getRadius());
+                imageView.setLayoutY(-bola.getRadius());
                 if (imageView != null){
-                groupBola.getChildren().add(imageView);
+                bolaCompleta.getChildren().add(imageView);
                 System.out.println("imagen :D");
                 }
             }
@@ -315,14 +318,9 @@ public class ElJuegoDeLaBola extends Application {
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
                 
-                if (imageView != null){
-                        imageView.setLayoutX(bolaX-bola.getRadius());
-                        imageView.setLayoutY(bolaY-bola.getRadius());
-                        }
-                
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
-                                        
+                                 
                     if (positivo == true){
                         incBolaX++;
                         if (imageView != null){
