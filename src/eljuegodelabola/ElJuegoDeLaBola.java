@@ -73,22 +73,13 @@ public class ElJuegoDeLaBola extends Application {
     Pane root;
     Pane root2;
     Group bolaCompleta;
-    
+    Group groupBola;
     public void movimiento(){
         incBolaY =-(incBolaX * Math.tan(radianes)-(gravedad*Math.pow(incBolaX,2))/(2*Math.pow(velocidad,2)*Math.pow(Math.cos(radianes),2)));
         incBolaY = (incBolaY/10);
                     
         bolaY = bolaInicioY + incBolaY;
         bolaX = bolaInicioX + incBolaX;
-    }
-    public void reinicio(){
-        golpe = false;
-        bolaInicioX= dimensionX/2;
-        bolaInicioY= dimensionY/2;
-        incBolaX = 0;
-        bolaX = dimensionX/2;
-        bolaY = dimensionY/2;
-        root.getChildren().add(bolaCompleta);
     }
     public void reboteizquierda(){
         positivo = true;
@@ -147,31 +138,41 @@ public class ElJuegoDeLaBola extends Application {
         bola.setCenterY(0);
         bola.setRadius(20);
         bola.setFill(Color.web(color1));
+        System.out.println("bola1");
         // Primer claro
         Circle bolaclaro = new Circle();
         bolaclaro.setCenterX(4);
         bolaclaro.setCenterY(-3);
         bolaclaro.setRadius(15);
         bolaclaro.setFill(Color.web(color2));
-        
+        System.out.println("bola2");
         // Segundo claro
         Circle bolablanca = new Circle();
         bolablanca.setCenterX(6);
         bolablanca.setCenterY(-8);
         bolablanca.setRadius(5);
         bolablanca.setFill(Color.web(color3));
-        
+        System.out.println("bola3");
         // Grupo de la Bola
-        Group groupBola = new Group();
+        groupBola = new Group();
         groupBola.getChildren().add(bola);
         groupBola.getChildren().add(bolaclaro);
         groupBola.getChildren().add(bolablanca);
-        System.out.println("Hola2");
-        if (imageView != null){
-        groupBola.getChildren().add(imageView);
-        }
+        System.out.println("grupo Creado");
+        
         root.getChildren().add(groupBola);
+        System.out.println("bolaAñadida2");
         return groupBola;
+    }
+    public void reinicio(){
+        golpe = false;
+        bolaInicioX= dimensionX/2;
+        bolaInicioY= dimensionY/2;
+        incBolaX = 0;
+        bolaX = dimensionX/2;
+        bolaY = dimensionY/2;
+        root.getChildren().add(bolaCompleta);
+        System.out.println("bolaAñadida1");
     }
     public void clickIzquierdo(){
         System.out.println("golpe-izquierdo");
@@ -229,7 +230,7 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(ActionEvent event) {
                 primaryStage.setScene(sceneBola);
-                bolaCreacion();                
+                
             }
         });
         Label label = new Label("Tamaño bola");
@@ -239,6 +240,7 @@ public class ElJuegoDeLaBola extends Application {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                     label5.setText(String.format("%1.0f", new_val));
+                    System.out.println(label5.getText());
             }
         });
         
@@ -249,6 +251,7 @@ public class ElJuegoDeLaBola extends Application {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                     label6.setText(String.format("%1.0f", new_val));
+                    System.out.println(label6.getText());
             }
         });
         Label label3 = new Label("Color de la bola");
@@ -288,7 +291,10 @@ public class ElJuegoDeLaBola extends Application {
                 imageView = new ImageView(image);
                 imageView.setFitHeight(bola.getRadius()*2);
                 imageView.setFitWidth(bola.getRadius()*2);
-                System.out.println("Hola");
+                if (imageView != null){
+                groupBola.getChildren().add(imageView);
+                System.out.println("imagen :D");
+                }
             }
         });
         
@@ -429,6 +435,7 @@ public class ElJuegoDeLaBola extends Application {
                             if (imageView != null){
                             imageView.setImage(null);
                             }
+                            System.out.println("Pausa/salir");
                             break;
                            
                    } 
