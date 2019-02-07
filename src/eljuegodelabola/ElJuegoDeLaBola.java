@@ -64,12 +64,13 @@ public class ElJuegoDeLaBola extends Application {
     double escalaX = 1;
     double escalaY = 1;
     boolean rotacion = false;
-    String color1="#006400";
-    String color2="#008000";
-    String color3="#7CFC00";
-    
+    double tiempoFrameAnterior = System.nanoTime();
+    final double FPS = 60;
+    double velocidadAceleracion = 0; 
     ImageView imageView;
     Circle bola;
+    Circle bolaclaro;
+    Circle bolablanca;
     Pane root;
     Pane root2;
     Group bolaCompleta;
@@ -136,21 +137,21 @@ public class ElJuegoDeLaBola extends Application {
         bola.setCenterX(0);
         bola.setCenterY(0);
         bola.setRadius(20);
-        bola.setFill(Color.web(color1));
+        bola.setFill(Color.web("#006400"));
         System.out.println("bola1");
         // Primer claro
-        Circle bolaclaro = new Circle();
+        bolaclaro = new Circle();
         bolaclaro.setCenterX(4);
         bolaclaro.setCenterY(-3);
         bolaclaro.setRadius(15);
-        bolaclaro.setFill(Color.web(color2));
+        bolaclaro.setFill(Color.web("#008000"));
         System.out.println("bola2");
         // Segundo claro
-        Circle bolablanca = new Circle();
+        bolablanca = new Circle();
         bolablanca.setCenterX(6);
         bolablanca.setCenterY(-8);
         bolablanca.setRadius(5);
-        bolablanca.setFill(Color.web(color3));
+        bolablanca.setFill(Color.web("#7CFC00"));
         System.out.println("bola3");
         // Grupo de la Bola
         Group groupBola = new Group();
@@ -170,6 +171,10 @@ public class ElJuegoDeLaBola extends Application {
         incBolaX = 0;
         bolaX = dimensionX/2;
         bolaY = dimensionY/2;
+        if(imageView != null){
+        imageView.setRotate(0);
+        velocidadAceleracion = 0;
+    }
         root.getChildren().add(bolaCompleta);
         System.out.println("bolaAñadida1");
     }
@@ -211,6 +216,7 @@ public class ElJuegoDeLaBola extends Application {
     public void start(Stage primaryStage) {       
         root = new Pane();
         root2 = new Pane();
+        
         bolaCompleta = bolaCreacion();
         Scene sceneBola = new Scene(root, dimensionX, dimensionY,Color.web("#000000"));
         Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
@@ -256,14 +262,66 @@ public class ElJuegoDeLaBola extends Application {
         Label label3 = new Label("Color de la bola");
         ChoiceBox choiceBox = new ChoiceBox();
         choiceBox.setItems(FXCollections.observableArrayList(
-        "Verde", "Rojo", "Amarillo", "Azul"));
+        "Verde", "Rojo", "Amarillo", "Cian","Blanca","Morada","Bounce","Naranja","Spectrum"));
         choiceBox.setTooltip(new Tooltip("Selecciona el tipo de bola"));
         choiceBox.getSelectionModel().selectFirst();
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() { 
 
 			// if the item of the list is changed 
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                            System.out.println(choiceBox.getItems().get((Integer) number2));
+//                            System.out.println(choiceBox.getItems().get((Integer) number2));
+                            System.out.println(number2);
+                            switch((int) number2){
+                                case 0:
+                                    bola.setFill(Color.web("#006400"));
+                                    bolaclaro.setFill(Color.web("#008000"));
+                                    bolablanca.setFill(Color.web("#7CFC00"));
+                                    break;
+                                case 1:
+                                    bola.setFill(Color.web("#640000"));
+                                    bolaclaro.setFill(Color.web("#800000"));
+                                    bolablanca.setFill(Color.web("#FC0000"));
+                                    break;
+                                
+                                case 2:
+                                    bola.setFill(Color.web("#646400"));
+                                    bolaclaro.setFill(Color.web("#808000"));
+                                    bolablanca.setFill(Color.web("#FCFC00"));
+                                    break;
+                                    
+                                case 3:
+                                    bola.setFill(Color.web("#006464"));
+                                    bolaclaro.setFill(Color.web("#008080"));
+                                    bolablanca.setFill(Color.web("#00FC80"));
+                                    break;
+                                case 4:
+                                    bola.setFill(Color.web("646464"));
+                                    bolaclaro.setFill(Color.web("808080"));
+                                    bolablanca.setFill(Color.web("FCFCFC"));
+                                    break;
+                                case 5:
+                                    bola.setFill(Color.web("640064"));
+                                    bolaclaro.setFill(Color.web("800080"));
+                                    bolablanca.setFill(Color.web("FF00FF"));
+                                    break;
+                                    
+                                case 6:
+                                    bola.setFill(Color.web("#8D2A24"));
+                                    bolaclaro.setFill(Color.web("#E03020"));
+                                    bolablanca.setFill(Color.web("#E03020"));
+                                    break;
+                                    
+                                case 7:
+                                    bola.setFill(Color.web("#643200"));
+                                    bolaclaro.setFill(Color.web("#804000"));
+                                    bolablanca.setFill(Color.web("#FC8000"));
+                                    break;
+                                case 8:
+                                    bola.setFill(Color.web("#FF00FF"));
+                                    bolaclaro.setFill(Color.web("#FF00FF"));
+                                    bolablanca.setFill(Color.web("#FF00FF"));
+                                    break;
+                            }
                             
                         } 
 	}); 
@@ -278,7 +336,9 @@ public class ElJuegoDeLaBola extends Application {
                 fileChooser.setTitle("Usar imagen bola");
                 
                 FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+                FileChooser.ExtensionFilter extFilterGIF = new FileChooser.ExtensionFilter("GIF files (*.gif)", "*.GIF");
                 fileChooser.getExtensionFilters().addAll(extFilterPNG);
+                fileChooser.getExtensionFilters().addAll(extFilterGIF);
                 File file = fileChooser.showOpenDialog(null);
                 String localUrl = null;
                 try {
@@ -310,28 +370,35 @@ public class ElJuegoDeLaBola extends Application {
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
-        
+
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
                 
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
+
                 
+                if(now - tiempoFrameAnterior >= 1_000_000_000.0 / FPS) {
+                    tiempoFrameAnterior = now;
+		    
+		}
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
                                  
                     if (positivo == true){
                         incBolaX++;
                         if (imageView != null){
-                            imageView.setRotate(20);                            
+                            velocidadAceleracion+=5;
+                            imageView.setRotate(velocidadAceleracion);                            
                         }
                     }
                     
                     else if (positivo == false){
                         incBolaX--;
                         if (imageView != null){
-                            imageView.setRotate(-20);
+                            velocidadAceleracion-=5;
+                            imageView.setRotate(velocidadAceleracion);
                         }
                     }
                     movimiento();
@@ -486,4 +553,3 @@ public class ElJuegoDeLaBola extends Application {
           animationBall.start();      
     }
 }
-
