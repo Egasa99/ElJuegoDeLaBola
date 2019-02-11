@@ -262,6 +262,7 @@ public class ElJuegoDeLaBola extends Application {
         Scene sceneMenu = new Scene(root2, dimensionX, dimensionY,Color.web("#FFFFFF"));
         primaryStage.setResizable(false);
         primaryStage.setFullScreenExitHint("");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("bolaIcono.PNG")));
         primaryStage.setWidth(dimensionX);
         primaryStage.setHeight(dimensionY);
         root.setStyle("-fx-background-color: transparent;");
