@@ -34,6 +34,8 @@ import javafx.scene.layout.VBox;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 
@@ -64,9 +66,8 @@ public class ElJuegoDeLaBola extends Application {
     double escalaX = 1;
     double escalaY = 1;
     boolean rotacion = false;
-    double tiempoFrameAnterior = System.nanoTime();
-    final double FPS = 60;
-    double velocidadAceleracion = 0; 
+    int puntuacion = 0;
+    double velocidadAceleracion = 0;
     ImageView imageView;
     Circle bola;
     Circle bolaclaro;
@@ -89,6 +90,8 @@ public class ElJuegoDeLaBola extends Application {
         anguloinicial= Math.abs(anguloinicial);
         anguloinicial=-anguloinicial;
         incBolaX = 0;
+        puntuacion += 1;
+        
     }
     public void rebotederecha(){
         positivo = false;
@@ -97,6 +100,8 @@ public class ElJuegoDeLaBola extends Application {
         bolaInicioX = bolaX;
         anguloinicial= Math.abs(anguloinicial);
         incBolaX = 0;
+        puntuacion += 1;
+        
     }
     public void rebotearribaizquierda(){
         positivo = true;
@@ -105,6 +110,8 @@ public class ElJuegoDeLaBola extends Application {
         anguloinicial= Math.abs(anguloinicial);
         anguloinicial=-anguloinicial;
         incBolaX = 0;
+        puntuacion += 1;
+        
     }
     public void rebotearribaderecha(){
         positivo = false;
@@ -112,6 +119,8 @@ public class ElJuegoDeLaBola extends Application {
         bolaInicioX = bolaX;
         anguloinicial= Math.abs(anguloinicial);
         incBolaX = 0;
+        puntuacion += 1;
+        
     }
     public void rebotederechahaciaarriba(){
         System.out.println("LISTO");
@@ -122,6 +131,8 @@ public class ElJuegoDeLaBola extends Application {
         anguloinicial=-anguloinicial;
         incBolaX = 0;
         rebAlto = false;
+        puntuacion += 1;
+        
     }
     public void reboteizquierdahaciaarriba(){
         System.out.println("LISTO");
@@ -131,6 +142,8 @@ public class ElJuegoDeLaBola extends Application {
         anguloinicial= Math.abs(anguloinicial);
         incBolaX = 0;
         rebAlto = false;
+        puntuacion += 1;
+        
     }
     public Group bolaCreacion(){         
         bola = new Circle();
@@ -171,6 +184,7 @@ public class ElJuegoDeLaBola extends Application {
         incBolaX = 0;
         bolaX = dimensionX/2;
         bolaY = dimensionY/2;
+        puntuacion = 0;
         if(imageView != null){
         imageView.setRotate(0);
         velocidadAceleracion = 0;
@@ -212,6 +226,32 @@ public class ElJuegoDeLaBola extends Application {
         anguloinicial = -anguloinicial;
         incBolaX = 0;
     }
+    
+    public void resolucionnormal(){
+        bola.setCenterX(0);
+        bola.setCenterY(0);
+        bola.setRadius(20);
+                            
+        bolaclaro.setCenterX(4);
+        bolaclaro.setCenterY(-3);
+        bolaclaro.setRadius(15);
+
+        bolablanca.setCenterX(6);
+        bolablanca.setCenterY(-8);
+        bolablanca.setRadius(5);
+    }
+    
+    public void resolucionGrande(){
+        bola.setCenterX(0);
+        bola.setCenterY(0);
+        bola.setRadius(30);       
+        bolaclaro.setCenterX(6);
+        bolaclaro.setCenterY(-4.5);
+        bolaclaro.setRadius(22.5);
+        bolablanca.setCenterX(9);
+        bolablanca.setCenterY(-12);
+        bolablanca.setRadius(7.5);
+    }
     @Override
     public void start(Stage primaryStage) {       
         root = new Pane();
@@ -241,12 +281,57 @@ public class ElJuegoDeLaBola extends Application {
         Label label = new Label("Tamaño bola");
         Label label5 = new Label("");
         Slider slider = new Slider(1, 10, 1);
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
+        slider.valueProperty().addListener (new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
-                    label5.setText(String.format("%1.0f", new_val));
-                    System.out.println(label5.getText());
+                    label5.setText(String.format("%.0f",new_val));
+//                    System.out.println(label5.getText());
+                    int i = new_val.intValue();
+                    
+                    switch(i){
+                        
+                        case 1:
+                            System.out.println("Es un "+i);
+                            break;
+
+                        case 2:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 3:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 4:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 5:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 6:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 7:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 8:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 9:
+                            System.out.println("Es un "+i);
+                            break;
+                            
+                        case 10:
+                            System.out.println("Es un "+i);
+                            break;
+                    }
             }
+
         });
         
         Label label2 = new Label("NumBola");
@@ -257,12 +342,13 @@ public class ElJuegoDeLaBola extends Application {
                 Number old_val, Number new_val) {
                     label6.setText(String.format("%1.0f", new_val));
                     System.out.println(label6.getText());
+                    
             }
         });
         Label label3 = new Label("Color de la bola");
         ChoiceBox choiceBox = new ChoiceBox();
         choiceBox.setItems(FXCollections.observableArrayList(
-        "Verde", "Rojo", "Amarillo", "Cian","Blanca","Morada","Bounce","Naranja","Spectrum"));
+        "Verde", "Rojo", "Amarillo", "Cian","Blanca","Morada","Bounce","Naranja","Spectrum","nula"));
         choiceBox.setTooltip(new Tooltip("Selecciona el tipo de bola"));
         choiceBox.getSelectionModel().selectFirst();
         choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() { 
@@ -321,6 +407,12 @@ public class ElJuegoDeLaBola extends Application {
                                     bolaclaro.setFill(Color.web("#FF00FF"));
                                     bolablanca.setFill(Color.web("#FF00FF"));
                                     break;
+                                
+                                case 9:
+                                    bola.setFill(Color.web("#000000"));
+                                    bolaclaro.setFill(Color.web("#000000"));
+                                    bolablanca.setFill(Color.web("#000000"));
+                                    break;
                             }
                             
                         } 
@@ -361,28 +453,37 @@ public class ElJuegoDeLaBola extends Application {
             }
         });
         
+        Label labelScore = new Label("Puntuacion: ");
+        labelScore.setTextFill(Color.web("#FFFFFF"));
+        labelScore.setFont(new Font(20));
+        
+        
+
         
         VBox vbox= new VBox(label,slider,label5,label2,slider2,label6,label3,choiceBox,button2,button);
+        
         root2.getChildren().add(vbox);
         
         
+        Label labelPuntuacion = new Label(String.valueOf(puntuacion));
+        labelPuntuacion.setTextFill(Color.web("#FFFFFF"));
+        labelPuntuacion.setFont(new Font(20));
+        HBox hbox = new HBox(labelScore,labelPuntuacion);
+        root.getChildren().add(hbox);
 // menu
         primaryStage.setTitle("El juego de la bola");
         primaryStage.setScene(sceneMenu);
         primaryStage.show();
-
+        
         AnimationTimer animationBall = new AnimationTimer(){
             @Override
             public void handle(long now){
                 
+                System.out.println(puntuacion);
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
 
                 
-                if(now - tiempoFrameAnterior >= 1_000_000_000.0 / FPS) {
-                    tiempoFrameAnterior = now;
-		    
-		}
                 if (golpe == true){
                     radianes = anguloinicial*Math.PI/180;
                                  
@@ -402,6 +503,17 @@ public class ElJuegoDeLaBola extends Application {
                         }
                     }
                     movimiento();
+                    if (dimensionX > 512 && dimensionY > 512){
+                        velocidad = 187.5;
+                        //187.5 
+                        gravedad = 22;
+                        //14.7105;
+                    }
+                    else{
+                        
+                        velocidad = 125;
+                        gravedad = 9.807;
+                    }
                     
                 }
                 
@@ -409,17 +521,21 @@ public class ElJuegoDeLaBola extends Application {
                 //rebote
                 if ((bolaX+bola.getRadius()) >= dimensionX){ //rebote pared derecha
                     rebotederecha();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }
                     
                 if  (((bolaX+bola.getRadius()) >= dimensionX)&&(rebAlto == true)){ // rebote hacia arriba
                     rebotederechahaciaarriba();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }
 
                 if ((bolaX-bola.getRadius()) <= 0){ // rebote pared izquierda
                     reboteizquierda();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }    
                 if (((bolaX-bola.getRadius()) <= 0)&&(rebAlto == true)){
                     reboteizquierdahaciaarriba();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }
                 
                 
@@ -427,14 +543,17 @@ public class ElJuegoDeLaBola extends Application {
                     root.getChildren().remove(bolaCompleta);
                     System.out.println("GAME OVER");
                     reinicio();
+                    labelPuntuacion.setText(String.valueOf(0));
                 }
                 
                 if ((bolaY-bola.getRadius()) <= 0 && positivo == true){
                     rebotearribaizquierda();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }
             
                 if ((bolaY-bola.getRadius()) <= 0 && positivo == false){
                     rebotearribaderecha();
+                    labelPuntuacion.setText(String.valueOf(puntuacion+1));
                 }
 
             };
@@ -443,6 +562,7 @@ public class ElJuegoDeLaBola extends Application {
  
         };
                 
+        
         
         sceneBola.setOnKeyPressed((KeyEvent event) ->{
                    switch(event.getCode()) {
@@ -454,11 +574,20 @@ public class ElJuegoDeLaBola extends Application {
                             primaryStage.setWidth(dimensionX);
                             primaryStage.setHeight(dimensionY);
                             golpe = false;
+                            puntuacion = 0;
                             bolaInicioX= dimensionX/2;
                             bolaInicioY= dimensionY/2;
                             incBolaX = 0;
                             bolaX = dimensionX/2;
                             bolaY = dimensionY/2;
+                            resolucionnormal();
+                            if (imageView != null){
+                            imageView.setRotate(0);
+                            imageView.setFitHeight(bola.getRadius()*2);
+                            imageView.setFitWidth(bola.getRadius()*2);
+                            imageView.setLayoutX(-bola.getRadius());
+                            imageView.setLayoutY(-bola.getRadius());
+                            }
                             break;
                        
                         case F10:
@@ -473,6 +602,16 @@ public class ElJuegoDeLaBola extends Application {
                             incBolaX = 0;
                             bolaX = dimensionX/2;
                             bolaY = dimensionY/2;
+                            puntuacion = 0;
+                            labelPuntuacion.setText(String.valueOf(puntuacion));
+                            resolucionGrande();
+                            if (imageView != null){
+                            imageView.setRotate(0);
+                            imageView.setFitHeight(bola.getRadius()*2);
+                            imageView.setFitWidth(bola.getRadius()*2);
+                            imageView.setLayoutX(-bola.getRadius());
+                            imageView.setLayoutY(-bola.getRadius());
+                            }
                             break;
                            
                         case F11:
@@ -485,13 +624,28 @@ public class ElJuegoDeLaBola extends Application {
                             bolaInicioX= dimensionX/2;
                             bolaInicioY= dimensionY/2;
                             incBolaX = 0;
+                            puntuacion = 0;
+                            labelPuntuacion.setText(String.valueOf(puntuacion));
                             bolaX = dimensionX/2;
                             bolaY = dimensionY/2;
+                            resolucionGrande();
+                            if (imageView != null){
+                            imageView.setRotate(0);
+                            imageView.setFitHeight(bola.getRadius()*2);
+                            imageView.setFitWidth(bola.getRadius()*2);
+                            imageView.setLayoutX(-bola.getRadius());
+                            imageView.setLayoutY(-bola.getRadius());
+                            }
                             break;
 
                         case ESCAPE:
                             primaryStage.setScene(sceneMenu);
+                            dimensionX = 512;
+                            dimensionY = 512;
+                            primaryStage.setWidth(dimensionX);
+                            primaryStage.setHeight(dimensionY);
                             golpe = false;
+                            choiceBox.getSelectionModel().selectFirst();
                             bolaInicioX= dimensionX/2;
                             bolaInicioY= dimensionY/2;
                             incBolaX = 0;
@@ -501,6 +655,7 @@ public class ElJuegoDeLaBola extends Application {
                             imageView.setImage(null);
                             }
                             System.out.println("Pausa/salir");
+                            resolucionnormal();
                             break;
                            
                    } 
