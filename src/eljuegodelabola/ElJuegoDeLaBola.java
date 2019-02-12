@@ -32,11 +32,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 
 
 /**
@@ -244,10 +246,12 @@ public class ElJuegoDeLaBola extends Application {
     public void resolucionGrande(){
         bola.setCenterX(0);
         bola.setCenterY(0);
-        bola.setRadius(30);       
+        bola.setRadius(30);
+        
         bolaclaro.setCenterX(6);
         bolaclaro.setCenterY(-4.5);
         bolaclaro.setRadius(22.5);
+        
         bolablanca.setCenterX(9);
         bolablanca.setCenterY(-12);
         bolablanca.setRadius(7.5);
@@ -308,7 +312,7 @@ public class ElJuegoDeLaBola extends Application {
                             break;
                             
                         case 5:
-                            System.out.println("Es un "+i);
+                            System.out.println("Valor por defecto");
                             break;
                             
                         case 6:
@@ -342,7 +346,7 @@ public class ElJuegoDeLaBola extends Application {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                     label6.setText(String.format("%1.0f", new_val));
-                    System.out.println(label6.getText());
+                    
                     
             }
         });
@@ -357,7 +361,7 @@ public class ElJuegoDeLaBola extends Application {
 			// if the item of the list is changed 
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
 //                            System.out.println(choiceBox.getItems().get((Integer) number2));
-                            System.out.println(number2);
+                            
                             switch((int) number2){
                                 case 0:
                                     bola.setFill(Color.web("#006400"));
@@ -480,7 +484,7 @@ public class ElJuegoDeLaBola extends Application {
             @Override
             public void handle(long now){
                 
-                System.out.println(puntuacion);
+                
                 bolaCompleta.setLayoutX(bolaX);
                 bolaCompleta.setLayoutY(bolaY);
 
@@ -616,10 +620,14 @@ public class ElJuegoDeLaBola extends Application {
                             break;
                            
                         case F11:
-                            dimensionX = 1366;
-                            dimensionY = 768;
-                            primaryStage.setWidth(dimensionX);
-                            primaryStage.setHeight(dimensionY);
+
+                            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+                            primaryStage.setWidth((primScreenBounds.getWidth()));
+                            primaryStage.setHeight((primScreenBounds.getHeight()));
+                            
+                            System.out.println();
+                            dimensionX = primaryStage.getWidth();
+                            dimensionY = primaryStage.getHeight();
                             primaryStage.setFullScreen(true);
                             golpe = false;
                             bolaInicioX= dimensionX/2;
