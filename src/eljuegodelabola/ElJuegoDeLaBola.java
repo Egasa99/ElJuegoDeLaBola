@@ -655,6 +655,8 @@ public class ElJuegoDeLaBola extends Application {
                             primaryStage.setHeight(dimensionY);
                             golpe = false;
                             choiceBox.getSelectionModel().selectFirst();
+                            puntuacion = 0;
+                            labelPuntuacion.setText(String.valueOf(puntuacion));
                             bolaInicioX= dimensionX/2;
                             bolaInicioY= dimensionY/2;
                             incBolaX = 0;
@@ -688,18 +690,18 @@ public class ElJuegoDeLaBola extends Application {
                         rebAlto = false;
                     }
                     
-                if (clickX>0 && clickY>0){
+                if (clickX>0 && clickY>-3){
                     clickDerecho();
                 }
                 
-                if(clickX>0 && clickY<0){
+                if(clickX>0 && clickY<-3){
                     clickDerechoSuperior();
                 }
-                if (clickX<0 && clickY>0){
+                if (clickX<0 && clickY>-3){
                     clickIzquierdo();
                 }
                 
-                if(clickX<0 && clickY<0){
+                if(clickX<0 && clickY<-3){
                     clickIzquierdoSuperior();
                 }
                 // También se puede comprobar sobre qué botón se ha actuado,
